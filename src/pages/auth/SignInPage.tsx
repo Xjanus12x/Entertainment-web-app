@@ -3,6 +3,8 @@ import { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { FirebaseAuth } from "../../firebase";
 import { useUser } from "../../context/AuthContext";
+import movieIcon from "../../assets/images/icons/Movie.svg";
+import Input from "../../ui/Input";
 
 const SignInPage = () => {
   // ==============================
@@ -36,29 +38,48 @@ const SignInPage = () => {
     }
   };
   return (
-    <main>
-      <Link className="home-link" to="/">
-        ◄ Home
-      </Link>
-      <form className="main-container" onSubmit={handleSubmit}>
-        <h1 className="header-text">Sign In</h1>
-        <input
-          name="email"
-          onChange={handleInputChange}
-          type="email"
-          placeholder="Email"
-        />
-        <input
-          name="password"
-          onChange={handleInputChange}
-          type="password"
-          placeholder="Password"
-        />
-        <button type="submit">Login</button>
-        <Link className="auth-link" to="/auth/sign-up">
-          Don't have an account? Sign Up
+    <main className="grid content-center px-6 min-h-dvh text-crispWhite gap-[3.625rem]">
+      <img
+        className="justify-self-center"
+        src={movieIcon}
+        alt="Movie icon"
+        aria-hidden
+      />
+      <div className="grid gap-6 p-6 bg-deepNavy w-full max-w-[25rem] container justify-self-center rounded-lg">
+        <form className="grid gap-10" onSubmit={handleSubmit}>
+          <header className="text-2.5xl">
+            <h1>Login</h1>
+          </header>
+          <div className="grid gap-6">
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              label="Email"
+              placeholder="Enter your email"
+            />
+
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              label="Password"
+              placeholder="Enter your password"
+            />
+          </div>
+          <button
+            className="bg-vividRed px-[4.25rem] py-[0.938rem] rounded-md"
+            type="submit"
+          >
+            Login
+          </button>
+        </form>
+
+        <Link className="text-center" to="/auth/sign-up">
+          Don't have an account?
+          <span className="ml-2 text-vividRed">Sign Up</span>
         </Link>
-      </form>
+      </div>
     </main>
   );
 };

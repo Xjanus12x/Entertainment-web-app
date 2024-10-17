@@ -1,9 +1,13 @@
+import movieIcon from "../../assets/images/icons/Movie.svg";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { FirebaseAuth } from "../../firebase";
 import { FirebaseError } from "firebase/app";
 import { useUser } from "../../context/AuthContext";
+import Input from "../../ui/Input";
+
+
 
 const SignUpPage = () => {
   // ==============================
@@ -39,38 +43,59 @@ const SignUpPage = () => {
   };
 
   return (
-    <main>
-      <Link className="home-link" to="/">
-        ◄ Home
-      </Link>
-      <form className="main-container" onSubmit={handleSubmit}>
-        <h1 className="header-text">Sign Up</h1>
-        <p
-          style={{
-            textAlign: "center",
-            fontSize: "0.8rem",
-            color: "#777",
-          }}
-        >
-          Demo app, please don't use your real email or password
-        </p>
-        <input
-          name="email"
-          onChange={handleInputChange}
-          type="email"
-          placeholder="Email"
-        />
-        <input
-          name="password"
-          onChange={handleInputChange}
-          type="password"
-          placeholder="Password"
-        />
-        <button type="submit">Create Account</button>
-        <Link className="auth-link" to="/auth/sign-in">
-          Already have an account? Sign In
+    <main className="grid content-center px-6 min-h-dvh text-crispWhite gap-[3.625rem]">
+      <img
+        className="justify-self-center"
+        src={movieIcon}
+        alt="Movie icon"
+        aria-hidden
+      />
+      <div className="grid gap-6 p-6 bg-deepNavy w-full max-w-[25rem] container justify-self-center rounded-lg">
+        <form className="grid gap-10" onSubmit={handleSubmit}>
+          <header className="text-2.5xl">
+            <h1>Sign Up</h1>
+          </header>
+          <div className="grid gap-6">
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              label="Email"
+              placeholder="Enter your email"
+              aria-labelledby="email"
+            />
+
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              label="Password"
+              placeholder="Enter your password"
+              aria-labelledby="password"
+            />
+
+            <Input
+              id="repeat-password"
+              name="repeat-password"
+              type="repeat-password"
+              label="Repeat Password"
+              placeholder="Repeat Passoword"
+              aria-labelledby="password"
+            />
+          </div>
+          <button
+            className="bg-vividRed px-[4.25rem] py-[0.938rem] rounded-md"
+            type="submit"
+          >
+            Create an account
+          </button>
+        </form>
+
+        <Link className="text-center" to="/auth/sign-up">
+          Already have an account?
+          <span className="ml-2 text-vividRed">Login</span>
         </Link>
-      </form>
+      </div>
     </main>
   );
 };

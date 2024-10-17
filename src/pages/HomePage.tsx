@@ -1,44 +1,82 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useUser } from "../context/AuthContext";
 import { FirebaseAuth } from "../firebase";
+import SignUpPage from "./auth/SignUpPage";
+import searchIcon from "../assets/images/icons/search.svg";
+import AdaptiveNavBar from "../components/AdaptiveNavBar";
+import Input from "../ui/Input";
+import MovieCard from "../components/MovieCard";
 
 const HomePage = () => {
   const { user } = useUser();
+
+  // Redirect to /sign-in if not authenticated
+  // if (!user) return <Navigate to="/auth/sign-in" replace />;
   return (
-    <main>
-      <section className="main-container">
-        <h1 className="header-text">React Firebase Auth Template</h1>
-        <p>Current User : {user?.email || "None"}</p>
-        {user ? (
-          <button onClick={() => FirebaseAuth.signOut()}>Sign Out</button>
-        ) : (
-          <Link to="/auth/sign-in">Sign In</Link>
-        )}
-        <Link to="/protected">Protected Page 🛡️</Link>
-        <div id="divider"></div>
-        <Link
-          to="https://github.com/mmvergara/react-firebase-auth-template"
-          target="_blank"
-          rel="noreferrer noopener"
-          id="github-repo-link"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            x="0px"
-            y="0px"
-            width="30"
-            height="50"
-            viewBox="0 0 64 64"
+    <div className="space-y-8">
+      <AdaptiveNavBar />
+      <main>
+        <section className="space-y-8 overflow-hidden" role="region">
+          <header>
+            <form className="flex gap-6">
+              <button aria-label="Search movies or TV series">
+                <img src={searchIcon} aria-hidden={true} />
+              </button>
+
+              <Input
+                className="w-full pb-0 border-b-0"
+                id="search"
+                label="Search for movies or TV series"
+                name="search"
+                type="text"
+                placeholder="Search for movies or TV series"
+              />
+            </form>
+          </header>
+
+          <section
+            className=" text-crispWhite"
+            role="region"
+            aria-labelledby="trending"
           >
-            <path
-              fill="#fff"
-              d="M32 6C17.641 6 6 17.641 6 32c0 12.277 8.512 22.56 19.955 25.286-.592-.141-1.179-.299-1.755-.479V50.85c0 0-.975.325-2.275.325-3.637 0-5.148-3.245-5.525-4.875-.229-.993-.827-1.934-1.469-2.509-.767-.684-1.126-.686-1.131-.92-.01-.491.658-.471.975-.471 1.625 0 2.857 1.729 3.429 2.623 1.417 2.207 2.938 2.577 3.721 2.577.975 0 1.817-.146 2.397-.426.268-1.888 1.108-3.57 2.478-4.774-6.097-1.219-10.4-4.716-10.4-10.4 0-2.928 1.175-5.619 3.133-7.792C19.333 23.641 19 22.494 19 20.625c0-1.235.086-2.751.65-4.225 0 0 3.708.026 7.205 3.338C28.469 19.268 30.196 19 32 19s3.531.268 5.145.738c3.497-3.312 7.205-3.338 7.205-3.338.567 1.474.65 2.99.65 4.225 0 2.015-.268 3.19-.432 3.697C46.466 26.475 47.6 29.124 47.6 32c0 5.684-4.303 9.181-10.4 10.4 1.628 1.43 2.6 3.513 2.6 5.85v8.557c-.576.181-1.162.338-1.755.479C49.488 54.56 58 44.277 58 32 58 17.641 46.359 6 32 6zM33.813 57.93C33.214 57.972 32.61 58 32 58 32.61 58 33.213 57.971 33.813 57.93zM37.786 57.346c-1.164.265-2.357.451-3.575.554C35.429 57.797 36.622 57.61 37.786 57.346zM32 58c-.61 0-1.214-.028-1.813-.07C30.787 57.971 31.39 58 32 58zM29.788 57.9c-1.217-.103-2.411-.289-3.574-.554C27.378 57.61 28.571 57.797 29.788 57.9z"
-            ></path>
-          </svg>
-          Github Repository
-        </Link>
-      </section>
-    </main>
+            <header className="text-2.5xl">
+              <h2 id="trending">Trending</h2>
+            </header>
+
+            <div className="w-full max-w-md p-4 space-x-4 carousel rounded-box carousel-center">
+              <div className="carousel-item">
+                <MovieCard />
+              </div>
+              <div className="carousel-item">
+                <MovieCard />
+              </div>
+              <div className="carousel-item">
+                <MovieCard />
+              </div>
+              <div className="carousel-item">
+                <MovieCard />
+              </div>
+              <div className="carousel-item">
+                <MovieCard />
+              </div>
+              <div className="carousel-item">
+                <MovieCard />
+              </div>
+            </div>
+          </section>
+
+          <section
+            className="text-crispWhite"
+            role="region"
+            aria-labelledby="recommended"
+          >
+            <header className="text-2.5xl">
+              <h2 id="recommended">Recommended for you</h2>
+            </header>
+          </section>
+        </section>
+      </main>
+    </div>
   );
 };
 
