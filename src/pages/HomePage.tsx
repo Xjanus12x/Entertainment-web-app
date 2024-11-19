@@ -1,82 +1,170 @@
-import { Link, Navigate } from "react-router-dom";
-import { useUser } from "../context/AuthContext";
-import { FirebaseAuth } from "../firebase";
-import SignUpPage from "./auth/SignUpPage";
-import searchIcon from "../assets/images/icons/search.svg";
-import AdaptiveNavBar from "../components/AdaptiveNavBar";
-import Input from "../ui/Input";
-import MovieCard from "../components/MovieCard";
+import { useMovies } from "../hooks";
+import useTVShows from "../hooks/useTVShows";
+import { DisplayMedias, MediaCarousel } from "../components";
+import MediaHeader from "../components/MediaHeader";
 
 const HomePage = () => {
-  const { user } = useUser();
+  // Fetch movies data
+  const {
+    trendingMovies,
+    popularMovies,
+    nowPlayingMovies,
+    upcommingMovies,
+    topRatedMovies,
+    isLoading: isLoadingMovies,
+  } = useMovies();
 
-  // Redirect to /sign-in if not authenticated
-  // if (!user) return <Navigate to="/auth/sign-in" replace />;
+  // Fetch TV shows data
+  const {
+    trendingTVShows,
+    popularTVShows,
+    airingTodayTVShows,
+    onAirTVShows,
+    topRatedTVShows,
+    isLoading: isLoadingTVShows,
+  } = useTVShows();
+
+  // Handle loading state for both movies and TV shows
+  if (isLoadingMovies || isLoadingTVShows) {
+    return (
+      <span className="absolute -translate-x-1/2 -translate-y-1/2 loading loading-infinity loading-lg text-error top-1/2 left-1/2"></span>
+    );
+  }
+
   return (
-    <div className="space-y-8">
-      <AdaptiveNavBar />
-      <main>
-        <section className="space-y-8 overflow-hidden" role="region">
-          <header>
-            <form className="flex gap-6">
-              <button aria-label="Search movies or TV series">
-                <img src={searchIcon} aria-hidden={true} />
-              </button>
+    <section className="space-y-8">
+      {/* Movies Section */}
+      <section className="grid gap-8 2xl:space-y-0 md:gap-8.2 text-crispWhite">
+        <MediaHeader
+          label="Trending Movies"
+          mediaType="movie"
+          seemoreLink="/movies/trending?page=1"
+        />
+        <MediaCarousel
+          labelledById="Trending-Movie"
+          mediaType="movie"
+          data={trendingMovies}
+        />
+      </section>
 
-              <Input
-                className="w-full pb-0 border-b-0"
-                id="search"
-                label="Search for movies or TV series"
-                name="search"
-                type="text"
-                placeholder="Search for movies or TV series"
-              />
-            </form>
-          </header>
+      <section className="grid gap-8 2xl:space-y-0 md:gap-8.2 text-crispWhite">
+        <MediaHeader
+          label="Popular Movies"
+          mediaType="movie"
+          seemoreLink="/movies/popular?page=1"
+        />
+        <DisplayMedias
+          labelledById="Popular-Movie"
+          mediaType="movie"
+          data={popularMovies}
+        />
+      </section>
 
-          <section
-            className=" text-crispWhite"
-            role="region"
-            aria-labelledby="trending"
-          >
-            <header className="text-2.5xl">
-              <h2 id="trending">Trending</h2>
-            </header>
+      <section className="grid gap-8 2xl:space-y-0 md:gap-8.2 text-crispWhite">
+        <MediaHeader
+          label="Now Playing"
+          mediaType="movie"
+          seemoreLink="/movies/now-playing?page=1"
+        />
+        <DisplayMedias
+          labelledById="Now Playing-Movie"
+          mediaType="movie"
+          data={nowPlayingMovies}
+        />
+      </section>
 
-            <div className="w-full max-w-md p-4 space-x-4 carousel rounded-box carousel-center">
-              <div className="carousel-item">
-                <MovieCard />
-              </div>
-              <div className="carousel-item">
-                <MovieCard />
-              </div>
-              <div className="carousel-item">
-                <MovieCard />
-              </div>
-              <div className="carousel-item">
-                <MovieCard />
-              </div>
-              <div className="carousel-item">
-                <MovieCard />
-              </div>
-              <div className="carousel-item">
-                <MovieCard />
-              </div>
-            </div>
-          </section>
+      <section className="grid gap-8 2xl:space-y-0 md:gap-8.2 text-crispWhite">
+        <MediaHeader
+          label="Upcoming Movies"
+          mediaType="movie"
+          seemoreLink="/movies/upcomming?page=1"
+        />
+        <DisplayMedias
+          labelledById="Upcoming-Movie"
+          mediaType="movie"
+          data={upcommingMovies}
+        />
+      </section>
 
-          <section
-            className="text-crispWhite"
-            role="region"
-            aria-labelledby="recommended"
-          >
-            <header className="text-2.5xl">
-              <h2 id="recommended">Recommended for you</h2>
-            </header>
-          </section>
-        </section>
-      </main>
-    </div>
+      <section className="grid gap-8 2xl:space-y-0 md:gap-8.2 text-crispWhite">
+        <MediaHeader
+          label="Top Rated Movies"
+          mediaType="movie"
+          seemoreLink="/movies/top-rated?page=1"
+        />
+        <DisplayMedias
+          labelledById="Top Rated-Movie"
+          mediaType="movie"
+          data={topRatedMovies}
+        />
+      </section>
+
+      {/* TV Shows Section */}
+      <section className="grid gap-8 2xl:space-y-0 md:gap-8.2 text-crispWhite">
+        <MediaHeader
+          label="Trending TV Shows"
+          mediaType="tv"
+          seemoreLink="/tv/trending?page=1"
+        />
+        <MediaCarousel
+          labelledById="Trending-TV"
+          mediaType="tv"
+          data={trendingTVShows}
+        />
+      </section>
+
+      <section className="grid gap-8 2xl:space-y-0 md:gap-8.2 text-crispWhite">
+        <MediaHeader
+          label="Popular TV Shows"
+          mediaType="tv"
+          seemoreLink="/tv/popular?page=1"
+        />
+        <DisplayMedias
+          labelledById="Popular-TV"
+          mediaType="tv"
+          data={popularTVShows}
+        />
+      </section>
+
+      <section className="grid gap-8 2xl:space-y-0 md:gap-8.2 text-crispWhite">
+        <MediaHeader
+          label="Airing Today"
+          mediaType="tv"
+          seemoreLink="/tv/airing-today?page=1"
+        />
+        <DisplayMedias
+          labelledById="Airing-Today-TV"
+          mediaType="tv"
+          data={airingTodayTVShows}
+        />
+      </section>
+
+      <section className="grid gap-8 2xl:space-y-0 md:gap-8.2 text-crispWhite">
+        <MediaHeader
+          label="On Air TV Shows"
+          mediaType="tv"
+          seemoreLink="/tv/on-air?page=1"
+        />
+        <DisplayMedias
+          labelledById="On-Air-TV"
+          mediaType="tv"
+          data={onAirTVShows}
+        />
+      </section>
+
+      <section className="grid gap-8 2xl:space-y-0 md:gap-8.2 text-crispWhite">
+        <MediaHeader
+          label="Top Rated TV Shows"
+          mediaType="tv"
+          seemoreLink="/tv/top-rated?page=1"
+        />
+        <DisplayMedias
+          labelledById="Top-Rated-TV"
+          mediaType="tv"
+          data={topRatedTVShows}
+        />
+      </section>
+    </section>
   );
 };
 

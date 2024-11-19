@@ -12,13 +12,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tanstack/react-query": "^4.36.1",
+    "crypto-js": "^4.2.0",
     "daisyui": "^4.12.13",
-    "firebase": "^10.12.2",
+    "dotenv": "^16.4.5",
+    "framer-motion": "^11.11.17",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.23.1"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^4.38.0",
+    "@types/crypto-js": "^4.2.2",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
