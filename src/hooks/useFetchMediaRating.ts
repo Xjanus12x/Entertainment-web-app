@@ -2,30 +2,46 @@ import { useQuery } from "@tanstack/react-query";
 import { defaultFetchOptions } from "../utils/fetchOptions";
 
 const fetchMediaRating = async (mediaType: string, mediaId: number) => {
-  // Construct the URL based on media type (movie or TV)
   const url = `https://api.themoviedb.org/3/${mediaType}/${mediaId}/${
     mediaType === "movie" ? "release_dates" : "content_ratings"
   }`;
 
-  const response = await fetch(url, defaultFetchOptions);
-  if (!response.ok) {
-    throw new Error("Failed to fetch media rating");
-  }
+  try {
+    const response = await fetch(url, defaultFetchOptions);
 
-  const data = await response.json();
+    // Check if the response is ok
+    if (!response.ok) {
+      let errorMessage = `Failed to fetch media rating. Status: ${response.status}`;
+      if (response.status === 404) {
+        errorMessage = "Media not found. Please check the media type and ID.";
+      } else if (response.status === 401) {
+        errorMessage = "Unauthorized access. Check your API key.";
+      } else if (response.status === 500) {
+        errorMessage = "Server error. Please try again later.";
+      }
+      console.warn(errorMessage);
+    }
 
-  // Extract the US rating if available
-  if (mediaType === "movie") {
-    const usRelease = data.results?.find(
-      (release: any) => release.iso_3166_1 === "US"
-    );
-    return usRelease?.release_dates[0]?.certification || "Not Rated";
-  } else {
-    const usRating = data.results?.find(
-      (rating: any) => rating.iso_3166_1 === "US"
-    );
+    const data = await response.json();
 
-    return usRating?.rating || "Not Rated";
+    // Extract the US rating if available
+    if (mediaType === "movie") {
+      const usRelease = data.results?.find(
+        (release: any) => release.iso_3166_1 === "US"
+      );
+      return usRelease?.release_dates[0]?.certification || "Not Rated";
+    } else {
+      const usRating = data.results?.find(
+        (rating: any) => rating.iso_3166_1 === "US"
+      );
+      return usRating?.rating || "Not Rated";
+    }
+  } catch (error: any) {
+    // Log the error to the console for debugging
+    console.warn("Error fetching media rating:", error);
+
+    // Optionally, return a fallback value or rethrow the error
+    return "N/A";
   }
 };
 

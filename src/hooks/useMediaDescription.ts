@@ -21,7 +21,7 @@ const useMediaDescription = () => {
       const url = `https://api.themoviedb.org/3/${mediaType}/${mediaId}?language=en-US`;
       const response = await fetch(url, defaultFetchOptions);
 
-      if (!response.ok) throw new Error("Failed to fetch media details");
+      if (!response.ok) console.warn("Failed to fetch media details");
 
       const result = await response.json();
 
@@ -29,7 +29,8 @@ const useMediaDescription = () => {
       if (result.title) {
         return result as MovieDetails;
       } else if (result.name) {
-        return result as TVShowDetails;
+        if (result.name) return result as TVShowDetails;
+        else return { name: "N/A", ...result } as TVShowDetails;
       } else {
         throw new Error("Invalid media type");
       }
@@ -47,7 +48,10 @@ const useMediaDescription = () => {
       const url = `https://api.themoviedb.org/3/${mediaType}/${mediaId}/credits?language=en-US`;
       const response = await fetch(url, defaultFetchOptions);
 
-      if (!response.ok) throw new Error("Failed to fetch cast and crew");
+      if (!response.ok) {
+        console.warn("Unable to fetch cast and crew. Please try again later.");
+        return { id: 0, cast: [], crew: [] };
+      }
       const result = await response.json();
       return result;
     },

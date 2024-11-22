@@ -2,6 +2,11 @@ import { Link, useLocation } from "react-router-dom";
 import MediaCard from "./MediaCard";
 import { Movie, TVShow } from "../models/SearchResult";
 import { useTMDB } from "../context/TMDBProvider";
+import { motion } from "framer-motion";
+import {
+  mediaCard,
+  mediaCardsContainer,
+} from "../animations/mediaCardAnimation";
 
 type MediaCarouselProps = {
   labelledById: string;
@@ -15,12 +20,15 @@ const MediaCarousel = ({
   data,
 }: MediaCarouselProps) => {
   const { watchlistId } = useTMDB();
-  
+
   return (
     <section className="lg:overflow-auto">
-      <div
+      <motion.div
         className="flex space-x-4 lg:overflow-visible carousel carousel-center 2xl:space-x-10 2xl:px-0"
         aria-labelledby={labelledById}
+        initial="hidden"
+        variants={mediaCardsContainer}
+        animate={data && data.length > 0 ? "show" : "hidden"}
       >
         {data?.map((item) => {
           const { id, backdrop_path } = item;
@@ -30,26 +38,31 @@ const MediaCarousel = ({
           );
 
           return (
-            <Link
-              className="min-h-33 sm:max-h-[14.375rem] carousel-item sm:w-full sm:max-w-[29.375rem] "
-              to={`/${mediaType === "movie" ? "movies" : "tv"}/${id}`}
+            <motion.div
+              className="carousel-item sm:max-h-[14.375rem] min-h-33 w-full sm:max-w-[29.375rem]"
               key={id}
+              variants={mediaCard}
             >
-              <MediaCard
-                isTrending={true}
-                data={{
-                  id,
-                  title,
-                  release_date: new Date(release_date),
-                  mediaType: "movie",
-                  thumbnail: backdrop_path,
-                  isBookmarked: watchlistId[id],
-                }}
-              />
-            </Link>
+              <Link
+                className=""
+                to={`/${mediaType === "movie" ? "movies" : "tv"}/${id}`}
+              >
+                <MediaCard
+                  isTrending={true}
+                  data={{
+                    id,
+                    title,
+                    release_date: new Date(release_date),
+                    mediaType: "movie",
+                    thumbnail: backdrop_path,
+                    isBookmarked: watchlistId[id],
+                  }}
+                />
+              </Link>
+            </motion.div>
           );
         })}
-      </div>
+      </motion.div>
     </section>
   );
 };

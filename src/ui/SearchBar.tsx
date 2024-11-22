@@ -24,7 +24,6 @@ const SearchBar = () => {
   useEffect(() => {
     if (localSearchedDebounced) {
       navigate(routeTo(pathname, localSearchedDebounced));
-      setLocalSearch("");
     }
   }, [localSearchedDebounced]);
 
@@ -35,7 +34,6 @@ const SearchBar = () => {
     >
       <img src={searchIcon} aria-hidden={true} />
       <Input
-        key={pathname}
         className="w-full p-0 border-none"
         id="search"
         label={searchLabel}

@@ -15,32 +15,47 @@ const getSearchType = (pathname: string) => {
   return "multi";
 };
 
-const useFetchSearchResults = (searchInput: string) => {
+// Utility to fetch search results
+const fetchSearchResults = async (
+  searchType: string,
+  search: string,
+  page: string
+): Promise<SearchResultPageData<Movie | TVShow | SearchMulti>> => {
+  const url = `https://api.themoviedb.org/3/search/${searchType}?query=${search}&include_adult=false&language=en-US&page=${page}`;
+  const response = await fetch(url, defaultFetchOptions);
+  if (!response.ok) {
+    console.warn("Failed to fetch data");
+    return {
+      page: 1,
+      results: [],
+      total_results: 0,
+      total_pages: 0,
+    };
+  }
+  return response.json();
+};
+
+const useFetchSearchResults = () => {
+  const [searchParams] = useSearchParams();
   const { pathname } = useLocation();
-  const [searchParams, _] = useSearchParams();
+  const search = searchParams.get("query") ?? "";
   const page = searchParams.get("page") ?? "1";
-  const { data, isLoading } = useQuery({
-    queryFn: async (): Promise<
-      SearchResultPageData<Movie | TVShow | SearchMulti>
-    > => {
-      const searchType = getSearchType(location.pathname);
-      const url = `https://api.themoviedb.org/3/search/${searchType}?query=${searchInput}&include_adult=false&language=en-US&page=${page}`;
 
-      const response = await fetch(url, defaultFetchOptions);
-      if (!response.ok) throw new Error("Failed to fetch data");
-      const data = await response.json();
-      // Ensure the data is valid before returning it
-      if (!data || !data.results) {
-        return { page: 1, results: [], total_results: 0, total_pages: 0 };
-      }
+  if (!search) {
+    console.warn("Search query is empty");
+    return { data: null, isLoading: false, search };
+  }
 
-      return data;
-    },
-    queryKey: ["searchMoviesOrTVSeries", searchInput, pathname, page],
-    enabled: !!searchInput,
-    keepPreviousData: false,
+  const searchType = getSearchType(pathname);
+
+  const { data, isLoading, error, isError, refetch } = useQuery({
+    queryFn: () => fetchSearchResults(searchType, search, page),
+    queryKey: ["searchMoviesOrTVSeries", search, pathname, page],
+    enabled: !!search,
+    keepPreviousData: true,
   });
-  return { data, isLoading };
+
+  return { data, isLoading, search, error, isError, refetch };
 };
 
 export default useFetchSearchResults;

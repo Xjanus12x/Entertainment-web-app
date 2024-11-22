@@ -51,7 +51,7 @@ const MediaCard = ({
   const { data: mediaRating } = useMediaRating(type, id);
 
   const { setIsOpen, setModal } = useModal();
-  const { setNotificationMessages, setIsNotificationOpen } = useNotifitcation();
+  const { addNotification } = useNotifitcation();
   const {
     accountData,
     sessionId,
@@ -68,7 +68,7 @@ const MediaCard = ({
     : "https://via.placeholder.com/500x750/cccccc/000000?text=No+Image+Available&font-size=50"; // Custom text placeholder with larger font
 
   return (
-    <article className="relative min-w-full">
+    <article className="relative w-full max-h-full">
       <img
         className={`object-cover object-center rounded-[8px] min-w-full brightness-50 ${
           isTrending ? "h-full" : "max-h-[10.875rem]"
@@ -102,7 +102,6 @@ const MediaCard = ({
                 status_message: string;
                 success: boolean;
               };
-              setIsNotificationOpen(true);
               if (success) {
                 if (mediaType === "tv series") {
                   refetchTvShowWatchList();
@@ -114,27 +113,20 @@ const MediaCard = ({
                 if (isWatchlist) {
                   const message =
                     "✅ The media has been successfully removed from your watchlist. If you change your mind, you can always add it back anytime!";
-                  setNotificationMessages((previousNotifications) => {
-                    return [...previousNotifications, message];
-                  });
+                  addNotification(message);
                   setIsWatchlist(false);
                 } else {
                   const message = `The ${
                     type === "movie" ? "movie" : "TV show"
                   } ${title} has been successfully added to your watchlist!`;
                   message;
-                  setNotificationMessages((previousNotifications) => {
-                    return [...previousNotifications, message];
-                  });
+                  addNotification(message);
                   setIsWatchlist(true);
                 }
               } else {
                 const message =
                   "Oops! We couldn't add this item to your watchlist. Please check your internet connection or try logging in again to refresh your session.";
-                setIsNotificationOpen(true);
-                setNotificationMessages((previousNotifications) => {
-                  return [...previousNotifications, message];
-                });
+                addNotification(message);
               }
             })();
           } else {

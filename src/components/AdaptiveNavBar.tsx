@@ -16,11 +16,6 @@ const AdaptiveNavBar = () => {
     ? `https://www.gravatar.com/avatar/${accountData.avatar.gravatar.hash}?s=200`
     : "/path/to/default/avatar.png"; // Fallback image if no avatar
 
-  useEffect(() => {
-    if (accountData) {
-      console.log(accountData);
-    }
-  }, [accountData]);
   return (
     <nav
       aria-label="Main navigation"
