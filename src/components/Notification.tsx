@@ -2,23 +2,16 @@ import ReactDOM from "react-dom";
 import { useNotifitcation } from "../context/ModalProvider";
 import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useDebounce } from "../hooks";
 
 const Notification = () => {
   const { notificationMessages, isNotificationOpen, setIsNotificationOpen } =
     useNotifitcation();
+  const debouncedMessages = useDebounce(notificationMessages, 2000);
 
   useEffect(() => {
-    let timeout;
-    if (notificationMessages.length > 0) {
-      setIsNotificationOpen(true);
-    } else {
-      timeout = setTimeout(() => {
-        setIsNotificationOpen(false);
-      }, 2000);
-    }
-    return () => clearTimeout(timeout);
-  }, [isNotificationOpen, notificationMessages, setIsNotificationOpen]);
-
+    setIsNotificationOpen(debouncedMessages.length > 0);
+  }, [debouncedMessages, setIsNotificationOpen]);
   if (!isNotificationOpen) return null;
 
   return ReactDOM.createPortal(

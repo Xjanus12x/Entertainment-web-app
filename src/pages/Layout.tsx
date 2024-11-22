@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import AdaptiveNavBar from "../components/AdaptiveNavBar";
 import SearchBar from "../ui/SearchBar";
 import Modal from "../components/Modal";
-import { useModal, useNotifitcation } from "../context/ModalProvider";
+import { useModal } from "../context/ModalProvider";
 import Notification from "../components/Notification";
 
 const Layout = () => {

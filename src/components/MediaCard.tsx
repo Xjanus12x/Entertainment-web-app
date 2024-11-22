@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useModal, useNotifitcation } from "../context/ModalProvider";
 import { useTMDB } from "../context/TMDBProvider";
 import useMediaRating from "../hooks/useFetchMediaRating";

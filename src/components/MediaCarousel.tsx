@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import MediaCard from "./MediaCard";
 import { Movie, TVShow } from "../models/SearchResult";
 import { useTMDB } from "../context/TMDBProvider";

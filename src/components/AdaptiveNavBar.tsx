@@ -2,7 +2,6 @@ import movieIcon from "../assets/images/icons/Movie.svg";
 import { Link, NavLink } from "react-router-dom";
 import { BookMarkIcon, FilmIcon, GridIcon, TVIcon } from "../icons";
 import { useTMDB } from "../context/TMDBProvider";
-import { useEffect } from "react";
 const isActive = ({ isActive }: { isActive: boolean }) =>
   `transition-transform duration-300 ${
     isActive ? "text-crispWhite scale-150" : "text-slateBlue"
