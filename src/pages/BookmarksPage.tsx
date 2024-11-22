@@ -2,6 +2,7 @@ import { DisplayMedias } from "../components";
 import MediaHeader from "../components/MediaHeader";
 import PaginationButtons from "../ui/PaginationButtons";
 import { useTMDB } from "../context/TMDBProvider";
+import DisplayError from "../components/DisplayError";
 
 const BookmarksPage = () => {
   const {
@@ -11,6 +12,10 @@ const BookmarksPage = () => {
     isLoadingTvShowWatchList,
     isErrorLoadingMovieWatchlistData,
     isErrorLoadingTvShowWatchListData,
+    errorMovieWatchlist,
+    errorTvShowWatchList,
+    refetchMovieWatchList,
+    refetchTvShowWatchList,
   } = useTMDB();
 
   if (isLoadingMovieWatchList || isLoadingTvShowWatchList) {
@@ -18,7 +23,21 @@ const BookmarksPage = () => {
       <span className="absolute -translate-x-1/2 -translate-y-1/2 loading loading-infinity loading-lg text-error top-1/2 left-1/2"></span>
     );
   }
-  
+  if (isErrorLoadingMovieWatchlistData) {
+    return (
+      <DisplayError
+        error={errorMovieWatchlist as Error}
+        refetch={refetchMovieWatchList}
+      />
+    );
+  } else if (isErrorLoadingTvShowWatchListData) {
+    return (
+      <DisplayError
+        error={errorTvShowWatchList as Error}
+        refetch={refetchTvShowWatchList}
+      />
+    );
+  }
   const hastMovieWatchList =
     movieWatchListData && movieWatchListData?.total_results > 0;
   const hasTvShowWatchList =
@@ -28,20 +47,21 @@ const BookmarksPage = () => {
     <section className="space-y-6 text-crispWhite">
       {hastMovieWatchList && (
         <section className="space-y-5">
-          <MediaHeader label={"Movie Watchlist"}></MediaHeader>
+          <MediaHeader label="Movie Watchlist" mediaType="movie"></MediaHeader>
           <DisplayMedias
-            labelledById=""
-            mediaType={"movie"}
+            labelledById="Movie Watchlist-movie"
+            mediaType="movie"
             data={movieWatchListData.results}
           />
         </section>
       )}
+
       {hasTvShowWatchList && (
         <section className="space-y-5">
-          <MediaHeader label={"TV Show Watchlist"}></MediaHeader>
+          <MediaHeader label="TV Show Watchlist" mediaType="tv"></MediaHeader>
           <DisplayMedias
-            labelledById=""
-            mediaType={"tv"}
+            labelledById="TV Show Watchlist-tv"
+            mediaType="tv"
             data={tvShowWatchListData.results}
           />
         </section>

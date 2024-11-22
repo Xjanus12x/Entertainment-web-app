@@ -22,6 +22,8 @@ type TMDBContextType = ReturnType<typeof useTMDBAuth> & {
   ) => Promise<QueryObserverResult<SearchResultPageData<TVShow>, unknown>>;
   isErrorLoadingMovieWatchlistData: boolean;
   isErrorLoadingTvShowWatchListData: boolean;
+  errorMovieWatchlist: Error;
+  errorTvShowWatchList: Error;
 };
 
 const TMDBContext = createContext<TMDBContextType | null>(null);
@@ -60,6 +62,8 @@ export const TMDBProvider = ({ children }: TMDBProviderProps) => {
     watchlistId,
     isErrorLoadingMovieWatchlistData,
     isErrorLoadingTvShowWatchListData,
+    errorMovieWatchlist,
+    errorTvShowWatchList,
   } = useFetchWatchlist(accountData!, sessionId);
 
   return (
@@ -84,6 +88,8 @@ export const TMDBProvider = ({ children }: TMDBProviderProps) => {
         refetchTvShowWatchList,
         isErrorLoadingMovieWatchlistData,
         isErrorLoadingTvShowWatchListData,
+        errorMovieWatchlist,
+        errorTvShowWatchList,
       }}
     >
       {children}

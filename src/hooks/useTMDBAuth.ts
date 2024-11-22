@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useModal } from "../context/ModalProvider";
 import { AccountDetails } from "../models/AccountDetails";
 import { useQuery } from "@tanstack/react-query";
@@ -28,7 +28,6 @@ const createSessionId = async (requestToken: string) => {
     );
 
     if (!response.ok) {
-      const errorData = await response.json();
       throw new Error("Failed to create session");
     }
 

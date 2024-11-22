@@ -120,7 +120,7 @@ const HomePage = () => {
           seemoreLink="/tv/popular?page=1"
         />
         <DisplayMedias
-          labelledById="Popular-TV"
+          labelledById="Popular TV Shows-tv"
           mediaType="tv"
           data={popularTVShows}
         />

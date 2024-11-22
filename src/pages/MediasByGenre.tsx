@@ -5,6 +5,7 @@ import { Movie, TVShow } from "../models/SearchResult";
 import { useFetchMediasByGenre } from "../hooks";
 import GoBackButton from "../ui/GoBackButton";
 import PaginationButtons from "../ui/PaginationButtons";
+import DisplayError from "../components/DisplayError";
 
 type MediasByGenre = {
   mediaType: "movie" | "tv";
@@ -13,12 +14,19 @@ const MediasByGenre = ({ mediaType }: MediasByGenre) => {
   const [searchParams, _] = useSearchParams();
   const page = searchParams.get("page") ?? "1";
   const genre = searchParams.get("name") ?? "";
-  const { data, isLoading } = useFetchMediasByGenre(mediaType, genre, page);
+  const { data, isLoading, isError, error, refetch } = useFetchMediasByGenre(
+    mediaType,
+    genre,
+    page
+  );
 
   if (isLoading) {
     return (
       <span className="absolute -translate-x-1/2 -translate-y-1/2 loading loading-infinity loading-lg text-error top-1/2 left-1/2"></span>
     );
+  }
+  if (isError) {
+    return <DisplayError error={error as Error} refetch={refetch} />;
   }
 
   const filteredData = data?.results

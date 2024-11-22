@@ -16,6 +16,7 @@ const useFetchWatchlist = (
     isLoading: isLoadingMovieWatchList,
     refetch: refetchMovieWatchList,
     isError: isErrorLoadingMovieWatchlistData,
+    error: errorMovieWatchlist,
   } = useQuery({
     queryFn: async (): Promise<SearchResultPageData<Movie>> => {
       const url = `https://api.themoviedb.org/3/account/${account?.id}/watchlist/movies?language=en-US&page=${page}&session_id=${sessionId}&sort_by=created_at.asc`;
@@ -46,6 +47,7 @@ const useFetchWatchlist = (
     isLoading: isLoadingTvShowWatchList,
     refetch: refetchTvShowWatchList,
     isError: isErrorLoadingTvShowWatchListData,
+    error: errorTvShowWatchList,
   } = useQuery({
     queryFn: async (): Promise<SearchResultPageData<TVShow>> => {
       const url = `https://api.themoviedb.org/3/account/${account?.id}/watchlist/tv?language=en-US&page=${page}&session_id=${sessionId}&sort_by=created_at.asc`;
@@ -96,6 +98,8 @@ const useFetchWatchlist = (
     watchlistId,
     isErrorLoadingMovieWatchlistData,
     isErrorLoadingTvShowWatchListData,
+    errorMovieWatchlist: errorMovieWatchlist as Error,
+    errorTvShowWatchList: errorTvShowWatchList as Error,
   };
 };
 export default useFetchWatchlist;
